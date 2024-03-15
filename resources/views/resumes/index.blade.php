@@ -40,12 +40,16 @@
                             </div>
 
                             <div>
-                                <a 
-                                    class="btn btn-danger "
-                                    href="{{ route('resumes.destroy', $resume->id ) }}"
-                                    >
-                                    Delete
-                                </a>
+                                <form method="POST" action="{{ route('resumes.destroy', $resume->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button 
+                                        type="submit"
+                                        class="btn btn-danger "
+                                        >
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </td>
