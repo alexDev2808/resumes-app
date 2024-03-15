@@ -72,7 +72,7 @@ class ResumeController extends Controller
      */
     public function show(Resume $resume)
     {
-        //
+        return view('resumes.show', compact('resume'));
     }
 
     /**
@@ -113,7 +113,7 @@ class ResumeController extends Controller
                 ->fit(800, 800)
                 ->save();
             
-            $data['picture'] = $picture;
+            $data['picture'] = "/storage/$picture";
         } 
 
         $resume->update($data);
