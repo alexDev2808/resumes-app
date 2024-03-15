@@ -177,8 +177,8 @@
 
             <div class="row mb-0 mt-3 ">
                 <div class="col-md-8 offset-md-4">
-                    <button type="submit" class="btn btn-primary">
-                        Crear
+                    <button type="submit" class="btn btn-warning">
+                        Editar
                     </button>
                 </div>
             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resume;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ResumeController extends Controller
 {
@@ -57,7 +58,10 @@ class ResumeController extends Controller
             'email' => $user->email,
         ]);
 
-        return redirect()->route('resumes.index');
+        return redirect()->route('resumes.index')->with('alert', [
+            'type' => 'success',
+            'message' => "Resume: $resume->title created successfully"
+        ]);
     }
 
     /**
@@ -97,9 +101,25 @@ class ResumeController extends Controller
             'website' => 'nullable|url',
             'picture' => 'nullable|image',
             'about' => 'nullable|string',
-            'title' => Rule::unique('resumes')->where(function( $query ) use ($resume)  {
-                return $query->where('user_id', $resume->user->id );
-            })->ignore($resume->id)
+            'title' => Rule::unique('resumes')
+                    ->where( fn( $query ) => $query->where('user_id', $resume->user->id ))
+                    ->ignore($resume->id)
+        ]);
+
+        if( array_key_exists( 'picture', $data ) ) {
+            $picture = $data['picture']->store('pictures', 'public');
+            Image::make(public_path("storage/$picture"))
+                ->fit(800, 800)
+                ->save();
+            
+            $data['picture'] = $picture;
+        } 
+
+        $resume->update($data);
+
+        return redirect()->route('resumes.index')->with('alert', [
+            'type' => 'warning',
+            'message' => "Resume: $resume->title updated successfully"
         ]);
     }
 
